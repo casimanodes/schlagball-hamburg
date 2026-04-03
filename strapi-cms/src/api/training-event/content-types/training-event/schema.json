@@ -1,0 +1,41 @@
+{
+  "kind": "collectionType",
+  "collectionName": "training_events",
+  "info": {
+    "singularName": "training-event",
+    "pluralName": "training-events",
+    "displayName": "TrainingEvent",
+    "description": "Trainingstage, Turniere und Veranstaltungen"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "date": {
+      "type": "date",
+      "required": true
+    },
+    "time": {
+      "type": "string",
+      "required": true
+    },
+    "location": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "text",
+      "required": false
+    },
+    "type": {
+      "type": "enumeration",
+      "enum": ["training", "hallentraining", "turnier", "event"],
+      "required": true
+    }
+  }
+}
