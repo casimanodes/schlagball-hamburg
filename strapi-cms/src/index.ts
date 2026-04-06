@@ -23,6 +23,8 @@ export default {
       'api::training-post.training-post.find',
       'api::training-post.training-post.findOne',
       'api::training-event.training-event.find',
+      'api::gallery-item.gallery-item.find',
+      'api::gallery-item.gallery-item.findOne',
     ];
 
     for (const action of requiredPermissions) {

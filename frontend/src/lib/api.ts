@@ -11,6 +11,7 @@ import type {
   PlayerProfile,
   TrainingPost,
   TrainingEvent,
+  GalleryItem,
   StrapiResponse,
 } from "@/types";
 import { fetchStrapi } from "./strapi";
@@ -18,6 +19,7 @@ import {
   mockPlayers,
   mockPosts,
   mockEvents,
+  mockGallery,
 } from "@/data/mock";
 
 const HAS_STRAPI = !!process.env.STRAPI_API_TOKEN;
@@ -151,4 +153,24 @@ export async function getUpcomingEvents(
     .filter((e) => e.date >= now)
     .sort((a, b) => a.date.localeCompare(b.date))
     .slice(0, limit));
+}
+
+/* ------------------------------------------------------------------ */
+/*  Gallery                                                            */
+/* ------------------------------------------------------------------ */
+
+export async function getGalleryItems(): Promise<GalleryItem[]> {
+  return tryStrapi(async () => {
+    const res = await fetchStrapi<StrapiResponse<GalleryItem[]>>(
+      "/gallery-items",
+      {
+        query: {
+          populate: ["image"],
+          sort: ["date:desc"],
+          pagination: { pageSize: 100 },
+        },
+      },
+    );
+    return res.data;
+  }, mockGallery.sort((a, b) => b.date.localeCompare(a.date)));
 }

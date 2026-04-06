@@ -27,6 +27,7 @@ export const NAV_ITEMS: NavItem[] = [
   { label: "Training", href: "/training" },
   { label: "Mitgliedschaft", href: "/mitgliedschaft" },
   { label: "Spieler", href: "/spieler" },
+  { label: "Galerie", href: "/galerie" },
   { label: "Blog", href: "/blog" },
   { label: "Kalender", href: "/kalender" },
 ];

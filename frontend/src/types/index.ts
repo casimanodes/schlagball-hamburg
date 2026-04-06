@@ -113,6 +113,24 @@ export interface MembershipPlan {
 }
 
 /* ------------------------------------------------------------------ */
+/*  Gallery                                                            */
+/* ------------------------------------------------------------------ */
+
+export type GalleryCategory = "training" | "turnier" | "vereinsleben";
+
+export interface GalleryItem {
+  id: number;
+  documentId: string;
+  title: string;
+  description: string | null;
+  category: GalleryCategory;
+  image: StrapiImage | null;
+  date: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+/* ------------------------------------------------------------------ */
 /*  Navigation                                                         */
 /* ------------------------------------------------------------------ */
 
