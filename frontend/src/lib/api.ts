@@ -165,11 +165,7 @@ export async function getGalleryItems(): Promise<GalleryItem[]> {
       "/gallery-items",
       {
         query: {
-          populate: {
-            image: {
-              fields: ["id", "url", "alternativeText", "width", "height"],
-            },
-          },
+          populate: ["image"],
           sort: ["date:desc"],
           pagination: { pageSize: 100 },
         },
