@@ -100,7 +100,7 @@ export default function AboutPage() {
       </ContentSection>
 
       <CTASection
-        variant="primary"
+        variant="sport"
         title="Werde Teil unseres Teams"
         description="Lerne uns kennen – komm zum Probetraining oder werde direkt Mitglied."
         primaryAction={{

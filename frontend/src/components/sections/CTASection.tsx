@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { buttonVariants } from "@/lib/button-variants";
 import { cn } from "@/lib/utils";
 
 interface CTASectionProps {
@@ -25,6 +24,30 @@ export default function CTASection({
     primary: "bg-primary text-primary-foreground",
   };
 
+  const baseButtonClass =
+    "inline-flex items-center justify-center rounded-lg px-5 py-2.5 text-base font-semibold tracking-tight transition-all outline-none select-none focus-visible:ring-2 focus-visible:ring-primary-foreground/25 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent active:translate-y-px";
+
+  const primaryButtonMap: Record<NonNullable<CTASectionProps["variant"]>, string> = {
+    // Green/orange CTA backgrounds: grounded navy primary button
+    accent:
+      "bg-primary text-primary-foreground shadow-sm hover:shadow-md hover:bg-primary/88",
+    sport:
+      "bg-primary text-primary-foreground shadow-sm hover:shadow-md hover:bg-primary/88",
+    // Navy CTA background: warm orange primary button
+    primary:
+      "bg-sport text-sport-foreground shadow-sm hover:shadow-md hover:bg-sport/88",
+  };
+
+  const secondaryButtonMap: Record<NonNullable<CTASectionProps["variant"]>, string> = {
+    // Secondary: solid, professional neutral button that contrasts with all CTA backgrounds.
+    accent:
+      "bg-background text-primary border border-primary/20 shadow-sm hover:shadow-md hover:bg-background/95",
+    sport:
+      "bg-background text-primary border border-primary/20 shadow-sm hover:shadow-md hover:bg-background/95",
+    primary:
+      "bg-background text-primary border border-primary/20 shadow-sm hover:shadow-md hover:bg-background/95",
+  };
+
   return (
     <section className={cn("py-16 md:py-24", bgMap[variant], className)}>
       <div className="container text-center">
@@ -38,11 +61,9 @@ export default function CTASection({
           <Link
             href={primaryAction.href}
             className={cn(
-              buttonVariants({
-                size: "lg",
-                variant: variant === "primary" ? "secondary" : "default",
-              }),
-              variant !== "primary" && "bg-white text-foreground hover:bg-white/90",
+              baseButtonClass,
+              "hover:-translate-y-0.5",
+              primaryButtonMap[variant],
             )}
           >
             {primaryAction.label}
@@ -51,8 +72,9 @@ export default function CTASection({
             <Link
               href={secondaryAction.href}
               className={cn(
-                buttonVariants({ size: "lg", variant: "outline" }),
-                "border-current/30 hover:bg-white/10",
+                baseButtonClass,
+                "hover:-translate-y-0.5",
+                secondaryButtonMap[variant],
               )}
             >
               {secondaryAction.label}

@@ -70,7 +70,7 @@ export default async function HomePage() {
         title="Willkommen bei Schlagball Hamburg"
         description="Erlebe den einzigartigen Mannschaftssport – Training, Turniere und Gemeinschaft in Hamburg. Für alle von 8 bis 25 Jahren."
         primaryAction={{ label: "Probetraining vereinbaren", href: "/training" }}
-        secondaryAction={{ label: "Mehr erfahren", href: "/sport" }}
+        secondaryAction={{ label: "Was ist Schlagball?", href: "/sport" }}
       />
 
       {/* Stats */}
@@ -120,6 +120,7 @@ export default async function HomePage() {
 
       {/* CTA */}
       <CTASection
+        variant="sport"
         title="Bereit für Schlagball?"
         description="Komm zum Probetraining vorbei – kostenlos und unverbindlich. Du brauchst nur Sportkleidung und gute Laune!"
         primaryAction={{

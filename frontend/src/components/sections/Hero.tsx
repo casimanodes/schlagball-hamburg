@@ -68,7 +68,7 @@ export default function Hero({
                   href={primaryAction.href}
                   className={cn(
                     buttonVariants({ size: "lg" }),
-                    "bg-accent text-accent-foreground hover:bg-accent/90",
+                    "bg-accent text-accent-foreground hover:bg-accent/90 text-base font-semibold shadow-md hover:shadow-lg transition-all hover:-translate-y-0.5 active:translate-y-0",
                   )}
                 >
                   {primaryAction.label}
@@ -79,7 +79,7 @@ export default function Hero({
                   href={secondaryAction.href}
                   className={cn(
                     buttonVariants({ size: "lg", variant: "outline" }),
-                    "border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10",
+                    "text-foreground text-base font-semibold bg-white/90 hover:bg-white shadow-sm hover:shadow-md transition-all hover:-translate-y-0.5 active:translate-y-0",
                   )}
                 >
                   {secondaryAction.label}

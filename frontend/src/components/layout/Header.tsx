@@ -24,7 +24,7 @@ export default function Header() {
       <div className="container flex h-16 items-center justify-between">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2">
-          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-primary-foreground font-bold text-sm">
+          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-accent text-primary-foreground font-bold text-sm">
             SH
           </div>
           <span className="hidden font-bold text-lg sm:inline-block">
@@ -54,7 +54,10 @@ export default function Header() {
         <div className="hidden lg:flex items-center gap-2">
           <Link
             href="/mitgliedschaft"
-            className={buttonVariants({ size: "sm" })}
+            className={cn(
+              buttonVariants({ size: "lg" }),
+              "bg-accent text-accent-foreground hover:bg-accent/90 font-semibold rounded-xl h-11 px-6 shadow-md hover:shadow-lg ring-1 ring-black/5 transition-all focus-visible:ring-2 focus-visible:ring-accent/30",
+            )}
           >
             Mitglied werden
           </Link>
@@ -94,7 +97,10 @@ export default function Header() {
                 <Link
                   href="/mitgliedschaft"
                   onClick={() => setOpen(false)}
-                  className={cn(buttonVariants(), "w-full")}
+                  className={cn(
+                    buttonVariants({ size: "lg" }),
+                    "w-full bg-accent text-accent-foreground hover:bg-accent/90 font-semibold rounded-xl h-11 px-6 shadow-md hover:shadow-lg ring-1 ring-black/5 transition-all focus-visible:ring-2 focus-visible:ring-accent/30",
+                  )}
                 >
                   Mitglied werden
                 </Link>

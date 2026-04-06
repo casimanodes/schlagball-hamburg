@@ -350,6 +350,7 @@ export default function SportPage() {
       </ContentSection>
 
       <CTASection
+        variant="sport"
         title="Lust auf Schlagball?"
         description="Probiere den Sport aus – komm einfach zum nächsten Training vorbei!"
         primaryAction={{
