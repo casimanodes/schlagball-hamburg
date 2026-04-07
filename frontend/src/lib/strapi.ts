@@ -3,6 +3,9 @@ import qs from "qs";
 const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL ?? "http://localhost:1337";
 const STRAPI_TOKEN = process.env.STRAPI_API_TOKEN;
 
+/** Fetch timeout in milliseconds */
+const FETCH_TIMEOUT_MS = 10_000;
+
 /* ------------------------------------------------------------------ */
 /*  Generic fetch helper for the Strapi REST API                       */
 /* ------------------------------------------------------------------ */
@@ -33,17 +36,25 @@ export async function fetchStrapi<T>(
     headers.Authorization = `Bearer ${STRAPI_TOKEN}`;
   }
 
-  const res = await fetch(url, {
-    headers,
-    next: cache ? undefined : { revalidate },
-    cache,
-  });
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
 
-  if (!res.ok) {
-    throw new Error(`Strapi fetch error: ${res.status} ${res.statusText} – ${url}`);
+  try {
+    const res = await fetch(url, {
+      headers,
+      signal: controller.signal,
+      next: cache ? undefined : { revalidate },
+      cache,
+    });
+
+    if (!res.ok) {
+      throw new Error(`Strapi fetch error: ${res.status} ${res.statusText} – ${url}`);
+    }
+
+    return res.json() as Promise<T>;
+  } finally {
+    clearTimeout(timeout);
   }
-
-  return res.json() as Promise<T>;
 }
 
 /* ------------------------------------------------------------------ */
@@ -53,5 +64,7 @@ export async function fetchStrapi<T>(
 export function strapiImageUrl(path: string | undefined | null): string {
   if (!path) return "/images/placeholder.jpg";
   if (path.startsWith("http")) return path;
-  return `${STRAPI_URL}${path}`;
+  const base = STRAPI_URL.replace(/\/+$/, "");
+  const cleanPath = path.startsWith("/") ? path : `/${path}`;
+  return `${base}${cleanPath}`;
 }

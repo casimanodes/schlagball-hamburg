@@ -2,7 +2,9 @@
  * Data access layer.
  *
  * Tries Strapi first when a token is configured.
- * Falls back to mock data when Strapi is unreachable (e.g. during Vercel build).
+ * Falls back to mock data only during build or in development when Strapi is
+ * unreachable. At runtime in production, errors are re-thrown so that ISR
+ * keeps the last successfully cached page instead of caching mock data.
  *
  * Every public function here is meant to be called from Server Components.
  */
@@ -23,8 +25,13 @@ import {
 } from "@/data/mock";
 
 const HAS_STRAPI = !!process.env.STRAPI_API_TOKEN;
+const IS_BUILD = process.env.NEXT_PHASE === "phase-production-build";
 
-/** Try Strapi, fall back to mock data on any error. */
+/**
+ * Try Strapi, handle failures depending on context:
+ * - No token / build phase / development → fall back to mock data
+ * - Production runtime → re-throw so ISR keeps the last good cached page
+ */
 async function tryStrapi<T>(
   fn: () => Promise<T>,
   fallback: T,
@@ -33,8 +40,13 @@ async function tryStrapi<T>(
   try {
     return await fn();
   } catch (err) {
-    console.warn("[api] Strapi unreachable, using mock data:", (err as Error).message);
-    return fallback;
+    console.error("[api] Strapi fetch failed:", (err as Error).message);
+    if (IS_BUILD || process.env.NODE_ENV === "development") {
+      console.warn("[api] Using mock data as fallback");
+      return fallback;
+    }
+    // At runtime in production, re-throw so ISR preserves the last good page
+    throw err;
   }
 }
 
