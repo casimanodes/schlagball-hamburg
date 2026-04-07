@@ -1,7 +1,7 @@
 import qs from "qs";
 
-const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL ?? "http://localhost:1337";
-const STRAPI_TOKEN = process.env.STRAPI_API_TOKEN;
+const STRAPI_URL = (process.env.NEXT_PUBLIC_STRAPI_URL ?? "http://localhost:1337").trim();
+const STRAPI_TOKEN = process.env.STRAPI_API_TOKEN?.trim();
 
 /** Fetch timeout in milliseconds */
 const FETCH_TIMEOUT_MS = 10_000;

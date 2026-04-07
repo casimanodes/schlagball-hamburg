@@ -1,6 +1,6 @@
 import type { NextConfig } from "next";
 
-const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL ?? "http://localhost:1337";
+const strapiUrl = (process.env.NEXT_PUBLIC_STRAPI_URL ?? "http://localhost:1337").trim();
 
 function strapiRemotePattern() {
   try {
@@ -24,11 +24,13 @@ function strapiRemotePattern() {
 const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
+      // Local / self-hosted Strapi (images under /uploads/)
       strapiRemotePattern(),
+      // Strapi Cloud CDN: images on *.media.strapiapp.com at root path (no /uploads/ prefix)
       {
         protocol: "https",
         hostname: "**.strapiapp.com",
-        pathname: "/uploads/**",
+        pathname: "/**",
       },
     ],
   },
