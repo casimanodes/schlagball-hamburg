@@ -255,6 +255,10 @@ function mergePageContent<T>(remote: Partial<T> | null | undefined, fallback: T)
 }
 
 async function fetchSingleType<T>(path: string, fallback: T): Promise<T> {
+  // Während des Vercel-Builds Strapi für Page-Inhalte überspringen,
+  // damit fehlende Single Types oder ungewohnte Strapi-Antworten den
+  // Build niemals stoppen können. Live-Updates kommen via ISR (revalidate).
+  if (IS_BUILD) return fallback;
   return tryStrapi(async () => {
     const res = await fetchStrapi<StrapiSingleResponse<Partial<T>>>(
       path,
