@@ -5,7 +5,7 @@
   "description": "Monorepo für Schlagball Hamburg e.V. – Frontend (Next.js) liegt unter frontend/, CMS unter strapi-cms/. Diese Root-package.json existiert ausschließlich, damit Vercel Next.js erkennt; die echten Build-Schritte laufen in frontend/.",
   "scripts": {
     "dev": "npm --prefix frontend run dev",
-    "build": "npm --prefix frontend ci && npm --prefix frontend run build",
+    "build": "npm --prefix frontend install --no-audit --no-fund && npm --prefix frontend run build",
     "start": "npm --prefix frontend run start",
     "lint": "npm --prefix frontend run lint"
   },
