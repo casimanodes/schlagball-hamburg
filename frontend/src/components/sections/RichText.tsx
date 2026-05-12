@@ -105,7 +105,7 @@ export default function RichText({ content, className }: RichTextProps) {
         i++;
       }
       blocks.push(
-        <ul key={blockKey++}>
+        <ul key={blockKey++} className="list-disc list-outside pl-6 space-y-1 my-3">
           {items.map((item, idx) => (
             <li key={idx}>{parseInline(item)}</li>
           ))}
@@ -115,6 +115,9 @@ export default function RichText({ content, className }: RichTextProps) {
     }
 
     // Default: paragraph (collect consecutive non-empty lines)
+    // Single newlines within a paragraph become <br> – this matches the
+    // intuition of editors typing into a Strapi textarea (a visual line
+    // break should produce a visual line break).
     const paraLines: string[] = [line];
     i++;
     while (
@@ -127,7 +130,14 @@ export default function RichText({ content, className }: RichTextProps) {
       i++;
     }
     blocks.push(
-      <p key={blockKey++}>{parseInline(paraLines.join(" "))}</p>,
+      <p key={blockKey++} className="my-3 leading-relaxed">
+        {paraLines.map((paraLine, lineIdx) => (
+          <React.Fragment key={lineIdx}>
+            {lineIdx > 0 && <br />}
+            {parseInline(paraLine)}
+          </React.Fragment>
+        ))}
+      </p>,
     );
   }
 
