@@ -54,7 +54,13 @@ import {
 } from "@/data/page-mocks";
 
 const HAS_STRAPI = !!process.env.STRAPI_API_TOKEN;
-const IS_BUILD = process.env.NEXT_PHASE === "phase-production-build";
+// Erkennt die Build-Phase auf zwei Wegen: NEXT_PHASE wird von Next.js
+// gesetzt, SKIP_STRAPI_AT_BUILD setzen wir explizit in vercel.json,
+// damit die Build-Phasen-Erkennung auch in Vercel-Workern verlässlich
+// funktioniert.
+const IS_BUILD =
+  process.env.NEXT_PHASE === "phase-production-build" ||
+  process.env.SKIP_STRAPI_AT_BUILD === "1";
 
 /**
  * Try Strapi, handle failures depending on context:

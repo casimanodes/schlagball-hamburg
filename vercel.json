@@ -4,5 +4,10 @@
   "buildCommand": "npm run build",
   "installCommand": "npm install --ignore-scripts",
   "outputDirectory": "frontend/.next",
-  "devCommand": "npm run dev"
+  "devCommand": "npm run dev",
+  "build": {
+    "env": {
+      "SKIP_STRAPI_AT_BUILD": "1"
+    }
+  }
 }
