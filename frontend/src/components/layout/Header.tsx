@@ -12,10 +12,14 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { NAV_ITEMS, SITE_NAME } from "@/lib/constants";
 import { cn } from "@/lib/utils";
+import type { GlobalContent } from "@/types/pages";
 
-export default function Header() {
+interface HeaderProps {
+  global: GlobalContent;
+}
+
+export default function Header({ global }: HeaderProps) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
 
@@ -28,13 +32,13 @@ export default function Header() {
             SH
           </div>
           <span className="hidden font-bold text-lg sm:inline-block">
-            {SITE_NAME}
+            {global.siteName}
           </span>
         </Link>
 
         {/* Desktop nav */}
         <nav className="hidden lg:flex items-center gap-1">
-          {NAV_ITEMS.map((item) => (
+          {global.navItems.map((item) => (
             <Link
               key={item.href}
               href={item.href}
@@ -53,13 +57,13 @@ export default function Header() {
         {/* Desktop CTA */}
         <div className="hidden lg:flex items-center gap-2">
           <Link
-            href="/mitgliedschaft"
+            href={global.headerCtaHref || "/mitgliedschaft"}
             className={cn(
               buttonVariants({ size: "lg" }),
               "bg-accent text-accent-foreground hover:bg-accent/90 font-semibold rounded-xl h-11 px-6 shadow-md hover:shadow-lg ring-1 ring-black/5 transition-all focus-visible:ring-2 focus-visible:ring-accent/30",
             )}
           >
-            Mitglied werden
+            {global.headerCtaLabel || "Mitglied werden"}
           </Link>
         </div>
 
@@ -75,10 +79,10 @@ export default function Header() {
           </SheetTrigger>
           <SheetContent side="right" className="w-80">
             <SheetHeader>
-              <SheetTitle className="text-left">{SITE_NAME}</SheetTitle>
+              <SheetTitle className="text-left">{global.siteName}</SheetTitle>
             </SheetHeader>
             <nav className="mt-6 flex flex-col gap-1">
-              {NAV_ITEMS.map((item) => (
+              {global.navItems.map((item) => (
                 <Link
                   key={item.href}
                   href={item.href}
@@ -95,14 +99,14 @@ export default function Header() {
               ))}
               <div className="mt-4 pt-4 border-t">
                 <Link
-                  href="/mitgliedschaft"
+                  href={global.headerCtaHref || "/mitgliedschaft"}
                   onClick={() => setOpen(false)}
                   className={cn(
                     buttonVariants({ size: "lg" }),
                     "w-full bg-accent text-accent-foreground hover:bg-accent/90 font-semibold rounded-xl h-11 px-6 shadow-md hover:shadow-lg ring-1 ring-black/5 transition-all focus-visible:ring-2 focus-visible:ring-accent/30",
                   )}
                 >
-                  Mitglied werden
+                  {global.headerCtaLabel || "Mitglied werden"}
                 </Link>
               </div>
             </nav>

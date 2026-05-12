@@ -1,0 +1,58 @@
+{
+  "kind": "singleType",
+  "collectionName": "page_training",
+  "info": {
+    "singularName": "page-training",
+    "pluralName": "page-trainings",
+    "displayName": "Training Seite",
+    "description": "Inhalte der Seite /training – Trainingseinheiten, Probetraining, CTA"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "hero": {
+      "type": "component",
+      "repeatable": false,
+      "component": "shared.hero"
+    },
+    "sessionsHeader": {
+      "type": "component",
+      "repeatable": false,
+      "component": "shared.section-header"
+    },
+    "sessions": {
+      "type": "component",
+      "repeatable": true,
+      "component": "page.training-session"
+    },
+    "trialHeader": {
+      "type": "component",
+      "repeatable": false,
+      "component": "shared.section-header"
+    },
+    "trialContent": {
+      "type": "richtext"
+    },
+    "trialButtonLabel": {
+      "type": "string"
+    },
+    "trialButtonHref": {
+      "type": "string"
+    },
+    "eventsHeader": {
+      "type": "component",
+      "repeatable": false,
+      "component": "shared.section-header"
+    },
+    "eventsAllLinkLabel": {
+      "type": "string"
+    },
+    "cta": {
+      "type": "component",
+      "repeatable": false,
+      "component": "shared.cta"
+    }
+  }
+}

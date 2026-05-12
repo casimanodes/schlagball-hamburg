@@ -1,0 +1,39 @@
+{
+  "collectionName": "components_shared_ctas",
+  "info": {
+    "displayName": "CTA Section",
+    "description": "Call-to-Action Bereich am Seitenende",
+    "icon": "rocket"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "text",
+      "required": true
+    },
+    "variant": {
+      "type": "enumeration",
+      "enum": ["accent", "sport", "primary"],
+      "default": "sport",
+      "required": true
+    },
+    "primaryActionLabel": {
+      "type": "string",
+      "required": true
+    },
+    "primaryActionHref": {
+      "type": "string",
+      "required": true
+    },
+    "secondaryActionLabel": {
+      "type": "string"
+    },
+    "secondaryActionHref": {
+      "type": "string"
+    }
+  }
+}

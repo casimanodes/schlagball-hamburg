@@ -5,7 +5,8 @@ import ContentSection from "@/components/sections/ContentSection";
 import SectionHeader from "@/components/sections/SectionHeader";
 import EmptyState from "@/components/sections/EmptyState";
 import BlogCard from "@/components/cards/BlogCard";
-import { getPosts } from "@/lib/api";
+import { getPosts, getBlogPage } from "@/lib/api";
+import { heroProps, sectionHeaderProps } from "@/lib/block-helpers";
 
 export const metadata: Metadata = {
   title: "Blog & Neuigkeiten",
@@ -14,23 +15,18 @@ export const metadata: Metadata = {
 };
 
 export default async function BlogPage() {
-  const posts = await getPosts();
+  const [page, posts] = await Promise.all([getBlogPage(), getPosts()]);
 
   return (
     <>
-      <Hero
-        subtitle="Aktuelles"
-        title="Blog & Neuigkeiten"
-        description="Rückblicke, Ankündigungen und Einblicke aus dem Vereinsleben."
-      />
+      <Hero {...heroProps(page.hero)} />
 
       <ContentSection>
         {posts.length > 0 ? (
           <>
             <SectionHeader
-              overline="Beiträge"
-              title="Alle Artikel"
-              description={`${posts.length} Beiträge`}
+              {...sectionHeaderProps(page.sectionHeader)}
+              description={`${posts.length} ${page.postCountSuffix}`}
             />
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {posts.map((post) => (
@@ -41,8 +37,8 @@ export default async function BlogPage() {
         ) : (
           <EmptyState
             icon={FileText}
-            title="Noch keine Beiträge"
-            description="Blog-Beiträge werden über das CMS erstellt und erscheinen hier automatisch."
+            title={page.emptyState.title}
+            description={page.emptyState.description}
           />
         )}
       </ContentSection>

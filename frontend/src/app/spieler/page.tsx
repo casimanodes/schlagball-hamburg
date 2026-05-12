@@ -5,7 +5,8 @@ import ContentSection from "@/components/sections/ContentSection";
 import SectionHeader from "@/components/sections/SectionHeader";
 import EmptyState from "@/components/sections/EmptyState";
 import PlayerCard from "@/components/cards/PlayerCard";
-import { getPlayers } from "@/lib/api";
+import { getPlayers, getPlayersPage } from "@/lib/api";
+import { heroProps, sectionHeaderProps } from "@/lib/block-helpers";
 
 export const metadata: Metadata = {
   title: "Spieler",
@@ -13,23 +14,18 @@ export const metadata: Metadata = {
 };
 
 export default async function PlayersPage() {
-  const players = await getPlayers();
+  const [page, players] = await Promise.all([getPlayersPage(), getPlayers()]);
 
   return (
     <>
-      <Hero
-        subtitle="Unser Team"
-        title="Unsere Spieler"
-        description="Die Spielerinnen und Spieler, die Schlagball Hamburg ausmachen – mit Leidenschaft und Teamgeist."
-      />
+      <Hero {...heroProps(page.hero)} />
 
       <ContentSection>
         {players.length > 0 ? (
           <>
             <SectionHeader
-              overline="Mannschaft"
-              title="Alle Spieler"
-              description={`${players.length} aktive Spielerinnen und Spieler`}
+              {...sectionHeaderProps(page.sectionHeader)}
+              description={`${players.length} ${page.playerCountSuffix}`}
             />
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {players.map((player) => (
@@ -40,8 +36,8 @@ export default async function PlayersPage() {
         ) : (
           <EmptyState
             icon={Users}
-            title="Noch keine Spielerprofile"
-            description="Spielerprofile werden über das CMS gepflegt und erscheinen hier, sobald sie angelegt wurden."
+            title={page.emptyState.title}
+            description={page.emptyState.description}
           />
         )}
       </ContentSection>

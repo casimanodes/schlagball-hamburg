@@ -1,0 +1,28 @@
+{
+  "collectionName": "components_page_contact_persons",
+  "info": {
+    "displayName": "Contact Person",
+    "description": "Kontaktperson mit Email und Telefon",
+    "icon": "user"
+  },
+  "options": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "role": {
+      "type": "string",
+      "required": true
+    },
+    "email": {
+      "type": "string"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "phoneHref": {
+      "type": "string"
+    }
+  }
+}

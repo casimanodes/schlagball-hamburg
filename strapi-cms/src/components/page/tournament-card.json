@@ -1,0 +1,23 @@
+{
+  "collectionName": "components_page_tournament_cards",
+  "info": {
+    "displayName": "Tournament Card",
+    "description": "Turnier-Karte mit Datum/Anlass, Titel und Beschreibung",
+    "icon": "trophy"
+  },
+  "options": {},
+  "attributes": {
+    "period": {
+      "type": "string",
+      "required": true
+    },
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "text",
+      "required": true
+    }
+  }
+}

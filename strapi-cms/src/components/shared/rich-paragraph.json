@@ -1,0 +1,18 @@
+{
+  "collectionName": "components_shared_rich_paragraphs",
+  "info": {
+    "displayName": "Rich Paragraph",
+    "description": "Ein Abschnitt mit Überschrift und Rich-Text-Inhalt (für längere Textpassagen)",
+    "icon": "align-left"
+  },
+  "options": {},
+  "attributes": {
+    "heading": {
+      "type": "string"
+    },
+    "body": {
+      "type": "richtext",
+      "required": true
+    }
+  }
+}

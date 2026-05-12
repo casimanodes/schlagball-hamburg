@@ -1,0 +1,63 @@
+{
+  "kind": "singleType",
+  "collectionName": "page_membership",
+  "info": {
+    "singularName": "page-membership",
+    "pluralName": "page-memberships",
+    "displayName": "Mitgliedschaft Seite",
+    "description": "Inhalte der Seite /mitgliedschaft – Beiträge, Anmeldeschritte, Antrag-Download, Vorteile"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "hero": {
+      "type": "component",
+      "repeatable": false,
+      "component": "shared.hero"
+    },
+    "plansHeader": {
+      "type": "component",
+      "repeatable": false,
+      "component": "shared.section-header"
+    },
+    "plans": {
+      "type": "component",
+      "repeatable": true,
+      "component": "page.membership-plan"
+    },
+    "stepsHeader": {
+      "type": "component",
+      "repeatable": false,
+      "component": "shared.section-header"
+    },
+    "steps": {
+      "type": "component",
+      "repeatable": true,
+      "component": "page.membership-step"
+    },
+    "downloadCardTitle": {
+      "type": "string"
+    },
+    "downloadCardDescription": {
+      "type": "text"
+    },
+    "downloadCardButtonLabel": {
+      "type": "string"
+    },
+    "downloadCardButtonHref": {
+      "type": "string"
+    },
+    "benefitsHeader": {
+      "type": "component",
+      "repeatable": false,
+      "component": "shared.section-header"
+    },
+    "benefits": {
+      "type": "component",
+      "repeatable": true,
+      "component": "page.benefit-item"
+    }
+  }
+}

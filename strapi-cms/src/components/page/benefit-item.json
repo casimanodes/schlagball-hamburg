@@ -1,0 +1,19 @@
+{
+  "collectionName": "components_page_benefit_items",
+  "info": {
+    "displayName": "Benefit Item",
+    "description": "Ein Vorteil der Mitgliedschaft (Titel + kurze Erklärung)",
+    "icon": "check"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "text": {
+      "type": "text",
+      "required": true
+    }
+  }
+}

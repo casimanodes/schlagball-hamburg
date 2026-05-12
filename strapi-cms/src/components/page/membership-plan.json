@@ -1,0 +1,36 @@
+{
+  "collectionName": "components_page_membership_plans",
+  "info": {
+    "displayName": "Membership Plan",
+    "description": "Mitgliedschaftsplan mit Preis und Features",
+    "icon": "star"
+  },
+  "options": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "price": {
+      "type": "decimal",
+      "required": true
+    },
+    "interval": {
+      "type": "string",
+      "required": true,
+      "default": "Monat"
+    },
+    "description": {
+      "type": "text",
+      "required": true
+    },
+    "features": {
+      "type": "json",
+      "required": true
+    },
+    "highlighted": {
+      "type": "boolean",
+      "default": false
+    }
+  }
+}

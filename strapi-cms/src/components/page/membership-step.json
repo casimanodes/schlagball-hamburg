@@ -1,0 +1,28 @@
+{
+  "collectionName": "components_page_membership_steps",
+  "info": {
+    "displayName": "Membership Step",
+    "description": "Ein Schritt im Anmeldeprozess (z.B. 1. Formular herunterladen)",
+    "icon": "list-ol"
+  },
+  "options": {},
+  "attributes": {
+    "step": {
+      "type": "integer",
+      "required": true
+    },
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "text",
+      "required": true
+    },
+    "icon": {
+      "type": "enumeration",
+      "enum": ["Download", "Mail", "CheckCircle2", "FileText"],
+      "required": true
+    }
+  }
+}

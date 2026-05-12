@@ -1,0 +1,35 @@
+{
+  "kind": "singleType",
+  "collectionName": "page_calendar",
+  "info": {
+    "singularName": "page-calendar",
+    "pluralName": "page-calendars",
+    "displayName": "Kalender Seite",
+    "description": "Inhalte der Seite /kalender – Hero, Empty-State"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "hero": {
+      "type": "component",
+      "repeatable": false,
+      "component": "shared.hero"
+    },
+    "emptyState": {
+      "type": "component",
+      "repeatable": false,
+      "component": "page.empty-state"
+    },
+    "upcomingTabLabel": {
+      "type": "string"
+    },
+    "pastTabLabel": {
+      "type": "string"
+    },
+    "filterAllLabel": {
+      "type": "string"
+    }
+  }
+}

@@ -1,18 +1,17 @@
 import type { Metadata } from "next";
-import {
-  Download,
-  Mail,
-  FileText,
-  CheckCircle2,
-} from "lucide-react";
 import Hero from "@/components/sections/Hero";
 import ContentSection from "@/components/sections/ContentSection";
 import SectionHeader from "@/components/sections/SectionHeader";
 import MembershipCard from "@/components/cards/MembershipCard";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { membershipPlans } from "@/data/mock";
+import Link from "next/link";
+import { CheckCircle2, FileText, Download } from "lucide-react";
 import { CONTACT_EMAIL } from "@/lib/constants";
+import { getMembershipPage } from "@/lib/api";
+import { resolveIcon } from "@/lib/icons";
+import { heroProps, sectionHeaderProps } from "@/lib/block-helpers";
+import type { MembershipPlan } from "@/types";
 
 export const metadata: Metadata = {
   title: "Mitgliedschaft & Beiträge",
@@ -20,48 +19,30 @@ export const metadata: Metadata = {
     "Werde Mitglied bei Schlagball Hamburg – Infos zu Beiträgen, Anmeldung und Vorteilen.",
 };
 
-const steps = [
-  {
-    step: 1,
-    title: "Anmeldeformular herunterladen",
-    description:
-      "Lade das Anmeldeformular herunter und fülle es vollständig aus.",
-    icon: Download,
-  },
-  {
-    step: 2,
-    title: "Formular einreichen",
-    description:
-      "Sende das ausgefüllte Formular per Post oder E-Mail an uns.",
-    icon: Mail,
-  },
-  {
-    step: 3,
-    title: "Willkommen im Verein!",
-    description:
-      "Nach Eingang deiner Anmeldung bist du offiziell Mitglied bei Schlagball Hamburg.",
-    icon: CheckCircle2,
-  },
-];
+export default async function MembershipPage() {
+  const page = await getMembershipPage();
 
-export default function MembershipPage() {
+  // Map Strapi-Plan-Blocks auf das bestehende MembershipPlan-Interface
+  const plans: MembershipPlan[] = page.plans.map((plan, idx) => ({
+    id: idx + 1,
+    documentId: `plan-${idx + 1}`,
+    name: plan.name,
+    price: plan.price,
+    interval: plan.interval,
+    description: plan.description,
+    features: plan.features,
+    highlighted: !!plan.highlighted,
+  }));
+
   return (
     <>
-      <Hero
-        subtitle="Mitgliedschaft"
-        title="Werde Teil von Schlagball Hamburg"
-        description="Einfache und faire Mitgliedsbeiträge – für regelmäßiges Training, Turniere und eine starke Gemeinschaft."
-      />
+      <Hero {...heroProps(page.hero)} />
 
       {/* Pricing */}
       <ContentSection>
-        <SectionHeader
-          overline="Beiträge"
-          title="Unsere Mitgliedschaftspläne"
-          description="Wähle den Plan, der zu dir passt."
-        />
+        <SectionHeader {...sectionHeaderProps(page.plansHeader)} />
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-3xl mx-auto items-start">
-          {membershipPlans.map((plan) => (
+          {plans.map((plan) => (
             <MembershipCard key={plan.id} plan={plan} />
           ))}
         </div>
@@ -69,14 +50,10 @@ export default function MembershipPage() {
 
       {/* Registration process */}
       <ContentSection id="anmeldung" className="bg-muted/50">
-        <SectionHeader
-          overline="Anmeldung"
-          title="So wirst du Mitglied"
-          description="In drei einfachen Schritten zum Vereinsmitglied."
-        />
+        <SectionHeader {...sectionHeaderProps(page.stepsHeader)} />
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
-          {steps.map((s) => {
-            const Icon = s.icon;
+          {page.steps.map((s) => {
+            const Icon = resolveIcon(s.icon);
             return (
               <Card key={s.step} className="text-center">
                 <CardContent className="p-6">
@@ -103,11 +80,9 @@ export default function MembershipPage() {
           <Card>
             <CardContent className="p-6 md:p-8 text-center">
               <FileText className="h-10 w-10 text-accent mx-auto mb-4" />
-              <h3 className="font-bold text-xl mb-2">
-                Mitgliedsantrag herunterladen
-              </h3>
+              <h3 className="font-bold text-xl mb-2">{page.downloadCardTitle}</h3>
               <p className="text-sm text-muted-foreground mb-6">
-                Lade das Formular herunter, fülle es aus und sende es an{" "}
+                {page.downloadCardDescription}{" "}
                 <a
                   href={`mailto:${CONTACT_EMAIL}`}
                   className="text-accent hover:underline"
@@ -116,10 +91,28 @@ export default function MembershipPage() {
                 </a>
                 .
               </p>
-              <Button size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90">
-                <Download className="h-4 w-4 mr-2" />
-                Antrag herunterladen (PDF)
-              </Button>
+              {page.downloadCardButtonHref && page.downloadCardButtonHref !== "#" ? (
+                <Link
+                  href={page.downloadCardButtonHref}
+                  className="inline-block"
+                >
+                  <Button
+                    size="lg"
+                    className="bg-accent text-accent-foreground hover:bg-accent/90"
+                  >
+                    <Download className="h-4 w-4 mr-2" />
+                    {page.downloadCardButtonLabel}
+                  </Button>
+                </Link>
+              ) : (
+                <Button
+                  size="lg"
+                  className="bg-accent text-accent-foreground hover:bg-accent/90"
+                >
+                  <Download className="h-4 w-4 mr-2" />
+                  {page.downloadCardButtonLabel}
+                </Button>
+              )}
             </CardContent>
           </Card>
         </div>
@@ -127,37 +120,9 @@ export default function MembershipPage() {
 
       {/* Benefits */}
       <ContentSection>
-        <SectionHeader
-          overline="Vorteile"
-          title="Warum Mitglied werden?"
-        />
+        <SectionHeader {...sectionHeaderProps(page.benefitsHeader)} />
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-4xl mx-auto">
-          {[
-            {
-              title: "Regelmäßiges Training",
-              text: "Bis zu 2× pro Woche professionell geleitetes Training.",
-            },
-            {
-              title: "Turniere & Wettkämpfe",
-              text: "Teilnahme an regionalen und überregionalen Turnieren.",
-            },
-            {
-              title: "Gemeinschaft",
-              text: "Ein starkes Team und neue Freundschaften.",
-            },
-            {
-              title: "Erfahrene Trainer",
-              text: "Qualifizierte Trainer mit jahrelanger Erfahrung.",
-            },
-            {
-              title: "Leihausrüstung",
-              text: "Du brauchst nichts mitbringen – wir stellen alles bereit.",
-            },
-            {
-              title: "Faire Beiträge",
-              text: "Transparente und günstige Mitgliedsbeiträge ab 9 € im Monat.",
-            },
-          ].map((item) => (
+          {page.benefits.map((item) => (
             <div key={item.title} className="flex gap-3">
               <CheckCircle2 className="h-5 w-5 text-accent shrink-0 mt-0.5" />
               <div>

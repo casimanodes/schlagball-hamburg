@@ -1,0 +1,27 @@
+{
+  "collectionName": "components_page_legal_sections",
+  "info": {
+    "displayName": "Legal Section",
+    "description": "Rechtliche Sektion (für Impressum/Datenschutz) mit Overline, Titel und Rich-Text",
+    "icon": "file-lines"
+  },
+  "options": {},
+  "attributes": {
+    "overline": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "body": {
+      "type": "richtext",
+      "required": true
+    },
+    "background": {
+      "type": "enumeration",
+      "enum": ["default", "muted"],
+      "default": "default"
+    }
+  }
+}

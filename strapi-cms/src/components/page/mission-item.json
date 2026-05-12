@@ -1,0 +1,19 @@
+{
+  "collectionName": "components_page_mission_items",
+  "info": {
+    "displayName": "Mission Item",
+    "description": "Einzelner Wert/Mission-Punkt mit großer Überschrift und Erklärung",
+    "icon": "star"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "text",
+      "required": true
+    }
+  }
+}

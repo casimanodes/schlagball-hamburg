@@ -1,0 +1,34 @@
+{
+  "kind": "singleType",
+  "collectionName": "page_players",
+  "info": {
+    "singularName": "page-players",
+    "pluralName": "page-players-plural",
+    "displayName": "Spieler Seite",
+    "description": "Inhalte der Seite /spieler – Hero, Section-Header, Empty-State"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "hero": {
+      "type": "component",
+      "repeatable": false,
+      "component": "shared.hero"
+    },
+    "sectionHeader": {
+      "type": "component",
+      "repeatable": false,
+      "component": "shared.section-header"
+    },
+    "playerCountSuffix": {
+      "type": "string"
+    },
+    "emptyState": {
+      "type": "component",
+      "repeatable": false,
+      "component": "page.empty-state"
+    }
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "collectionName": "components_page_training_sessions",
+  "info": {
+    "displayName": "Training Session",
+    "description": "Eine Trainingseinheit mit Zeit, Ort, Altersgruppe und Features",
+    "icon": "calendar-days"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "icon": {
+      "type": "enumeration",
+      "enum": ["Sun", "Building2", "Clock"],
+      "required": true
+    },
+    "day": {
+      "type": "string",
+      "required": true
+    },
+    "time": {
+      "type": "string",
+      "required": true
+    },
+    "location": {
+      "type": "string",
+      "required": true
+    },
+    "ageRange": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "text",
+      "required": true
+    },
+    "features": {
+      "type": "json",
+      "required": true
+    }
+  }
+}
