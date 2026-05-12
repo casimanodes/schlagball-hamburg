@@ -22,6 +22,12 @@ function strapiRemotePattern() {
 }
 
 const nextConfig: NextConfig = {
+  // Verhindert die "multiple lockfiles" Warnung indem das frontend/
+  // Verzeichnis explizit als Workspace-Root markiert wird. process.cwd()
+  // ist beim Next-Start immer das frontend/ Verzeichnis.
+  turbopack: {
+    root: process.cwd(),
+  },
   images: {
     remotePatterns: [
       // Local / self-hosted Strapi (images under /uploads/)
