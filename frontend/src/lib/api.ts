@@ -15,7 +15,22 @@ import type {
   TrainingEvent,
   GalleryItem,
   StrapiResponse,
+  StrapiSingleResponse,
 } from "@/types";
+import type {
+  HomePageContent,
+  AboutPageContent,
+  SportPageContent,
+  TrainingPageContent,
+  MembershipPageContent,
+  GalleryPageContent,
+  PlayersPageContent,
+  BlogPageContent,
+  CalendarPageContent,
+  ImprintPageContent,
+  PrivacyPageContent,
+  GlobalContent,
+} from "@/types/pages";
 import { fetchStrapi } from "./strapi";
 import {
   mockPlayers,
@@ -23,6 +38,20 @@ import {
   mockEvents,
   mockGallery,
 } from "@/data/mock";
+import {
+  mockHomePage,
+  mockAboutPage,
+  mockSportPage,
+  mockTrainingPage,
+  mockMembershipPage,
+  mockGalleryPage,
+  mockPlayersPage,
+  mockBlogPage,
+  mockCalendarPage,
+  mockImprintPage,
+  mockPrivacyPage,
+  mockGlobalContent,
+} from "@/data/page-mocks";
 
 const HAS_STRAPI = !!process.env.STRAPI_API_TOKEN;
 const IS_BUILD = process.env.NEXT_PHASE === "phase-production-build";
@@ -185,4 +214,100 @@ export async function getGalleryItems(): Promise<GalleryItem[]> {
     );
     return res.data;
   }, mockGallery.sort((a, b) => b.date.localeCompare(a.date)));
+}
+
+/* ------------------------------------------------------------------ */
+/*  Page content (Single Types)                                        */
+/* ------------------------------------------------------------------ */
+
+/**
+ * Tiefe Populate-Strategie für Single Types: lädt alle Components mit
+ * ihren Sub-Components, damit Hero, CTA, etc. komplett befüllt sind.
+ */
+const PAGE_POPULATE_DEEP = {
+  populate: "*" as const,
+};
+
+/**
+ * Strapi liefert Single-Type-Inhalte mit vielen verschachtelten Components.
+ * `mergePageContent` verschmilzt Strapi-Daten mit Mock-Defaults, sodass
+ * leere Felder den Default zeigen statt zu crashen.
+ */
+function mergePageContent<T>(remote: Partial<T> | null | undefined, fallback: T): T {
+  if (!remote) return fallback;
+  const result = { ...fallback } as Record<string, unknown>;
+  for (const [key, value] of Object.entries(remote)) {
+    if (value === null || value === undefined) continue;
+    if (Array.isArray(value) && value.length === 0) continue;
+    if (typeof value === "object" && !Array.isArray(value)) {
+      const fallbackVal = (fallback as Record<string, unknown>)[key];
+      if (fallbackVal && typeof fallbackVal === "object" && !Array.isArray(fallbackVal)) {
+        result[key] = mergePageContent(
+          value as Partial<unknown>,
+          fallbackVal as unknown,
+        );
+        continue;
+      }
+    }
+    result[key] = value;
+  }
+  return result as T;
+}
+
+async function fetchSingleType<T>(path: string, fallback: T): Promise<T> {
+  return tryStrapi(async () => {
+    const res = await fetchStrapi<StrapiSingleResponse<Partial<T>>>(
+      path,
+      { query: PAGE_POPULATE_DEEP },
+    );
+    return mergePageContent(res.data, fallback);
+  }, fallback);
+}
+
+export function getHomePage(): Promise<HomePageContent> {
+  return fetchSingleType("/page-home", mockHomePage);
+}
+
+export function getAboutPage(): Promise<AboutPageContent> {
+  return fetchSingleType("/page-about", mockAboutPage);
+}
+
+export function getSportPage(): Promise<SportPageContent> {
+  return fetchSingleType("/page-sport", mockSportPage);
+}
+
+export function getTrainingPage(): Promise<TrainingPageContent> {
+  return fetchSingleType("/page-training", mockTrainingPage);
+}
+
+export function getMembershipPage(): Promise<MembershipPageContent> {
+  return fetchSingleType("/page-membership", mockMembershipPage);
+}
+
+export function getGalleryPage(): Promise<GalleryPageContent> {
+  return fetchSingleType("/page-gallery", mockGalleryPage);
+}
+
+export function getPlayersPage(): Promise<PlayersPageContent> {
+  return fetchSingleType("/page-players", mockPlayersPage);
+}
+
+export function getBlogPage(): Promise<BlogPageContent> {
+  return fetchSingleType("/page-blog", mockBlogPage);
+}
+
+export function getCalendarPage(): Promise<CalendarPageContent> {
+  return fetchSingleType("/page-calendar", mockCalendarPage);
+}
+
+export function getImprintPage(): Promise<ImprintPageContent> {
+  return fetchSingleType("/page-imprint", mockImprintPage);
+}
+
+export function getPrivacyPage(): Promise<PrivacyPageContent> {
+  return fetchSingleType("/page-privacy", mockPrivacyPage);
+}
+
+export function getGlobalContent(): Promise<GlobalContent> {
+  return fetchSingleType("/global-content", mockGlobalContent);
 }

@@ -1,0 +1,37 @@
+{
+  "collectionName": "components_shared_heros",
+  "info": {
+    "displayName": "Hero",
+    "description": "Hero-Bereich am Seitenanfang (groß oder klein)",
+    "icon": "heading"
+  },
+  "options": {},
+  "attributes": {
+    "subtitle": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "text"
+    },
+    "primaryActionLabel": {
+      "type": "string"
+    },
+    "primaryActionHref": {
+      "type": "string"
+    },
+    "secondaryActionLabel": {
+      "type": "string"
+    },
+    "secondaryActionHref": {
+      "type": "string"
+    },
+    "large": {
+      "type": "boolean",
+      "default": false
+    }
+  }
+}

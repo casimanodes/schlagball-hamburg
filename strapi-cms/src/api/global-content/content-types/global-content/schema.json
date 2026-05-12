@@ -1,0 +1,64 @@
+{
+  "kind": "singleType",
+  "collectionName": "global_content",
+  "info": {
+    "singularName": "global-content",
+    "pluralName": "global-contents",
+    "displayName": "Globale Inhalte",
+    "description": "Übergreifende Texte (Header, Footer, Kontakt, Social) – auf jeder Seite sichtbar"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "siteName": {
+      "type": "string",
+      "required": true
+    },
+    "siteDescription": {
+      "type": "text"
+    },
+    "contactEmail": {
+      "type": "string"
+    },
+    "instagramHandle": {
+      "type": "string"
+    },
+    "instagramUrl": {
+      "type": "string"
+    },
+    "trainingAddress": {
+      "type": "string"
+    },
+    "footerBrandText": {
+      "type": "text"
+    },
+    "footerNavigationHeading": {
+      "type": "string"
+    },
+    "footerMoreHeading": {
+      "type": "string"
+    },
+    "footerContactHeading": {
+      "type": "string"
+    },
+    "footerCopyrightText": {
+      "type": "string"
+    },
+    "footerTagline": {
+      "type": "string"
+    },
+    "headerCtaLabel": {
+      "type": "string"
+    },
+    "headerCtaHref": {
+      "type": "string"
+    },
+    "navItems": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.nav-item"
+    }
+  }
+}

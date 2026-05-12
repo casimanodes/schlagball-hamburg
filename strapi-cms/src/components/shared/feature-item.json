@@ -1,0 +1,46 @@
+{
+  "collectionName": "components_shared_feature_items",
+  "info": {
+    "displayName": "Feature Item",
+    "description": "Einzelne Feature-Karte (Titel, Beschreibung, optionaler Link)",
+    "icon": "grid"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "text",
+      "required": true
+    },
+    "icon": {
+      "type": "enumeration",
+      "enum": [
+        "Volleyball",
+        "Clock",
+        "Users",
+        "Trophy",
+        "Sun",
+        "Building2",
+        "MapPin",
+        "CheckCircle2",
+        "Download",
+        "Mail",
+        "FileText",
+        "Crosshair",
+        "Hand",
+        "Zap",
+        "Medal",
+        "CircleDot",
+        "Ruler",
+        "CalendarDays",
+        "Phone"
+      ]
+    },
+    "href": {
+      "type": "string"
+    }
+  }
+}

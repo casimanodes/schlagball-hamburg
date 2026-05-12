@@ -3,8 +3,12 @@ import Hero from "@/components/sections/Hero";
 import ContentSection from "@/components/sections/ContentSection";
 import SectionHeader from "@/components/sections/SectionHeader";
 import CTASection from "@/components/sections/CTASection";
-import TeamMemberCard from "@/components/cards/TeamMemberCard";
-import { teamMembers } from "@/data/mock";
+import RichText from "@/components/sections/RichText";
+import { Card, CardContent } from "@/components/ui/card";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { strapiImageUrl } from "@/lib/strapi";
+import { getAboutPage } from "@/lib/api";
+import { ctaProps, heroProps, sectionHeaderProps } from "@/lib/block-helpers";
 
 export const metadata: Metadata = {
   title: "Über uns",
@@ -12,106 +16,87 @@ export const metadata: Metadata = {
     "Erfahre mehr über Schlagball Hamburg e.V., unsere Geschichte, Mission und das Team hinter dem Verein.",
 };
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const page = await getAboutPage();
+  const sortedTeam = [...page.teamMembers].sort(
+    (a, b) => (a.order ?? 0) - (b.order ?? 0),
+  );
+
   return (
     <>
-      <Hero
-        subtitle="Über uns"
-        title="Unser Verein"
-        description="Schlagball Hamburg e.V. – gegründet aus Leidenschaft für einen einzigartigen Sport. Wir bringen Menschen zusammen und fördern Teamgeist, Bewegung und Freude am Spiel."
-      />
+      <Hero {...heroProps(page.hero)} />
 
-      {/* Story */}
       <ContentSection>
         <div className="max-w-3xl mx-auto">
-          <SectionHeader
-            overline="Unsere Geschichte"
-            title="Von der Schulbank auf den Sportplatz"
+          <SectionHeader {...sectionHeaderProps(page.storyHeader)} />
+          <RichText
+            content={page.storyContent}
+            className="prose prose-lg max-w-none text-muted-foreground"
           />
-          <div className="prose prose-lg max-w-none text-muted-foreground">
-            <p>
-              Was als gemeinsames Projekt an der Winterhuder Reformschule begann,
-              ist heute ein wachsender Sportverein. Seit über 5 Jahren geben
-              Cassio und Mateo jeden Freitag von 14 bis 16 Uhr Training –
-              mittlerweile auch mit Hallentraining am Donnerstag.
-            </p>
-            <p>
-              Schlagball Hamburg e.V. steht für mehr als nur Sport: Wir sind eine
-              Gemeinschaft, die junge Menschen von 8 bis 25 Jahren
-              zusammenbringt. Unser Ziel ist es, den traditionellen Sport
-              Schlagball in Hamburg lebendig zu halten und neue Generationen
-              dafür zu begeistern.
-            </p>
-            <p>
-              Mit qualifizierten Trainern, regelmäßigem Training und der
-              Teilnahme an Turnieren wie der Deutschen Meisterschaft auf
-              Spiekeroog und der Kieler Woche bieten wir unseren Mitgliedern ein
-              vielfältiges und spannendes Vereinsleben.
-            </p>
-          </div>
         </div>
       </ContentSection>
 
-      {/* Mission */}
       <ContentSection className="bg-muted/50">
         <div className="max-w-3xl mx-auto">
-          <SectionHeader
-            overline="Mission"
-            title="Was uns antreibt"
-          />
+          <SectionHeader {...sectionHeaderProps(page.missionHeader)} />
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-center">
-            <div className="p-6">
-              <p className="text-3xl font-bold text-accent mb-2">Bewegung</p>
-              <p className="text-sm text-muted-foreground">
-                Sport als Grundlage für ein gesundes und aktives Leben – für jede
-                Altersgruppe.
-              </p>
-            </div>
-            <div className="p-6">
-              <p className="text-3xl font-bold text-accent mb-2">Teamgeist</p>
-              <p className="text-sm text-muted-foreground">
-                Zusammen spielen, zusammen wachsen – Schlagball ist
-                Mannschaftssport im besten Sinne.
-              </p>
-            </div>
-            <div className="p-6">
-              <p className="text-3xl font-bold text-accent mb-2">Tradition</p>
-              <p className="text-sm text-muted-foreground">
-                Einen historischen Sport für die Zukunft bewahren und neu
-                interpretieren.
-              </p>
-            </div>
+            {page.missionItems.map((item) => (
+              <div key={item.title} className="p-6">
+                <p className="text-3xl font-bold text-accent mb-2">
+                  {item.title}
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  {item.description}
+                </p>
+              </div>
+            ))}
           </div>
         </div>
       </ContentSection>
 
-      {/* Team */}
       <ContentSection>
-        <SectionHeader
-          overline="Das Team"
-          title="Die Menschen hinter dem Verein"
-          description="Unsere Trainer und Vorstände bringen jahrelange Erfahrung und Leidenschaft mit."
-        />
+        <SectionHeader {...sectionHeaderProps(page.teamHeader)} />
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-          {teamMembers.map((member) => (
-            <TeamMemberCard key={member.id} member={member} />
-          ))}
+          {sortedTeam.map((member) => {
+            const initials = member.name
+              .split(" ")
+              .map((n) => n[0])
+              .join("")
+              .toUpperCase()
+              .slice(0, 2);
+            return (
+              <Card key={member.name} className="overflow-hidden">
+                <CardContent className="p-6">
+                  <div className="flex flex-col sm:flex-row gap-5">
+                    <Avatar className="h-20 w-20 ring-2 ring-border shrink-0">
+                      {member.image ? (
+                        <AvatarImage
+                          src={strapiImageUrl(member.image.url)}
+                          alt={member.name}
+                        />
+                      ) : null}
+                      <AvatarFallback className="text-lg font-bold bg-primary text-primary-foreground">
+                        {initials}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div>
+                      <h3 className="font-semibold text-lg">{member.name}</h3>
+                      <p className="text-sm text-accent font-medium">
+                        {member.role}
+                      </p>
+                      <p className="text-sm text-muted-foreground mt-2 leading-relaxed">
+                        {member.description}
+                      </p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            );
+          })}
         </div>
       </ContentSection>
 
-      <CTASection
-        variant="sport"
-        title="Werde Teil unseres Teams"
-        description="Lerne uns kennen – komm zum Probetraining oder werde direkt Mitglied."
-        primaryAction={{
-          label: "Mitglied werden",
-          href: "/mitgliedschaft",
-        }}
-        secondaryAction={{
-          label: "Zum Training",
-          href: "/training",
-        }}
-      />
+      <CTASection {...ctaProps(page.cta)} />
     </>
   );
 }

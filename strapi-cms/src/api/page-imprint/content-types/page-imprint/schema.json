@@ -1,0 +1,44 @@
+{
+  "kind": "singleType",
+  "collectionName": "page_imprint",
+  "info": {
+    "singularName": "page-imprint",
+    "pluralName": "page-imprints",
+    "displayName": "Impressum Seite",
+    "description": "Inhalte der Seite /impressum – Vereinsangaben, Kontakte, Haftungsabschnitte"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "hero": {
+      "type": "component",
+      "repeatable": false,
+      "component": "shared.hero"
+    },
+    "vereinsangabenHeader": {
+      "type": "component",
+      "repeatable": false,
+      "component": "shared.section-header"
+    },
+    "vereinsangaben": {
+      "type": "richtext"
+    },
+    "kontaktHeader": {
+      "type": "component",
+      "repeatable": false,
+      "component": "shared.section-header"
+    },
+    "kontakte": {
+      "type": "component",
+      "repeatable": true,
+      "component": "page.contact-person"
+    },
+    "haftungSections": {
+      "type": "component",
+      "repeatable": true,
+      "component": "page.legal-section"
+    }
+  }
+}

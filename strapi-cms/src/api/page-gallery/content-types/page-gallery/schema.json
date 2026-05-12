@@ -1,0 +1,31 @@
+{
+  "kind": "singleType",
+  "collectionName": "page_gallery",
+  "info": {
+    "singularName": "page-gallery",
+    "pluralName": "page-galleries",
+    "displayName": "Galerie Seite",
+    "description": "Inhalte der Seite /galerie – Hero, Section-Header, CTA"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "hero": {
+      "type": "component",
+      "repeatable": false,
+      "component": "shared.hero"
+    },
+    "sectionHeader": {
+      "type": "component",
+      "repeatable": false,
+      "component": "shared.section-header"
+    },
+    "cta": {
+      "type": "component",
+      "repeatable": false,
+      "component": "shared.cta"
+    }
+  }
+}

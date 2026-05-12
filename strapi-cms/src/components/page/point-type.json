@@ -1,0 +1,24 @@
+{
+  "collectionName": "components_page_point_types",
+  "info": {
+    "displayName": "Punkteart",
+    "description": "Einzelne Punkteart im Schlagball mit Icon und Beschreibung",
+    "icon": "trophy"
+  },
+  "options": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "icon": {
+      "type": "enumeration",
+      "enum": ["Zap", "Crosshair", "Hand", "Medal", "CircleDot", "Ruler"],
+      "required": true
+    },
+    "description": {
+      "type": "text",
+      "required": true
+    }
+  }
+}

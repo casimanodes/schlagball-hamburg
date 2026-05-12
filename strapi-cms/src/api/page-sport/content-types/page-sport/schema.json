@@ -1,0 +1,85 @@
+{
+  "kind": "singleType",
+  "collectionName": "page_sport",
+  "info": {
+    "singularName": "page-sport",
+    "pluralName": "page-sports",
+    "displayName": "Sport Seite",
+    "description": "Inhalte der Seite /sport – Spielprinzip, Regeln, Ausrüstung, Spielfeld, Turniere, FAQ, CTA"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "hero": {
+      "type": "component",
+      "repeatable": false,
+      "component": "shared.hero"
+    },
+    "overviewHeader": {
+      "type": "component",
+      "repeatable": false,
+      "component": "shared.section-header"
+    },
+    "overviewContent": {
+      "type": "richtext"
+    },
+    "pointsHeader": {
+      "type": "component",
+      "repeatable": false,
+      "component": "shared.section-header"
+    },
+    "points": {
+      "type": "component",
+      "repeatable": true,
+      "component": "page.point-type"
+    },
+    "equipmentHeader": {
+      "type": "component",
+      "repeatable": false,
+      "component": "shared.section-header"
+    },
+    "equipmentCards": {
+      "type": "component",
+      "repeatable": true,
+      "component": "page.equipment-card"
+    },
+    "fieldHeader": {
+      "type": "component",
+      "repeatable": false,
+      "component": "shared.section-header"
+    },
+    "fieldContent": {
+      "type": "richtext"
+    },
+    "fieldBadges": {
+      "type": "json"
+    },
+    "tournamentsHeader": {
+      "type": "component",
+      "repeatable": false,
+      "component": "shared.section-header"
+    },
+    "tournaments": {
+      "type": "component",
+      "repeatable": true,
+      "component": "page.tournament-card"
+    },
+    "faqHeader": {
+      "type": "component",
+      "repeatable": false,
+      "component": "shared.section-header"
+    },
+    "faqs": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.faq-item"
+    },
+    "cta": {
+      "type": "component",
+      "repeatable": false,
+      "component": "shared.cta"
+    }
+  }
+}

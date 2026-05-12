@@ -1,0 +1,19 @@
+{
+  "collectionName": "components_page_empty_states",
+  "info": {
+    "displayName": "Empty State",
+    "description": "Hinweis, der angezeigt wird wenn keine Daten verfügbar sind",
+    "icon": "circle-info"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "text",
+      "required": true
+    }
+  }
+}

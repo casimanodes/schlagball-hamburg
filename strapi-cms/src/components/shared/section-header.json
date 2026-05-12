@@ -1,0 +1,21 @@
+{
+  "collectionName": "components_shared_section_headers",
+  "info": {
+    "displayName": "Section Header",
+    "description": "Überschrift mit Overline und optionaler Beschreibung für eine Sektion",
+    "icon": "bold"
+  },
+  "options": {},
+  "attributes": {
+    "overline": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "text"
+    }
+  }
+}

@@ -2,12 +2,9 @@ import type { Metadata } from "next";
 import { CalendarDays } from "lucide-react";
 import Hero from "@/components/sections/Hero";
 import ContentSection from "@/components/sections/ContentSection";
-import SectionHeader from "@/components/sections/SectionHeader";
 import EmptyState from "@/components/sections/EmptyState";
-import EventCard from "@/components/cards/EventCard";
-import { Badge } from "@/components/ui/badge";
-import { getEvents } from "@/lib/api";
-import type { TrainingEventType } from "@/types";
+import { getEvents, getCalendarPage } from "@/lib/api";
+import { heroProps } from "@/lib/block-helpers";
 import CalendarFilter from "./CalendarFilter";
 
 export const metadata: Metadata = {
@@ -17,7 +14,7 @@ export const metadata: Metadata = {
 };
 
 export default async function CalendarPage() {
-  const events = await getEvents();
+  const [page, events] = await Promise.all([getCalendarPage(), getEvents()]);
 
   const now = new Date().toISOString().split("T")[0];
   const upcoming = events.filter((e) => e.date >= now);
@@ -25,20 +22,24 @@ export default async function CalendarPage() {
 
   return (
     <>
-      <Hero
-        subtitle="Termine"
-        title="Kalender"
-        description="Trainingstage, Turniere und Veranstaltungen – alle Termine auf einen Blick."
-      />
+      <Hero {...heroProps(page.hero)} />
 
       <ContentSection>
         {events.length > 0 ? (
-          <CalendarFilter upcoming={upcoming} past={past} />
+          <CalendarFilter
+            upcoming={upcoming}
+            past={past}
+            labels={{
+              upcomingTabLabel: page.upcomingTabLabel,
+              pastTabLabel: page.pastTabLabel,
+              filterAllLabel: page.filterAllLabel,
+            }}
+          />
         ) : (
           <EmptyState
             icon={CalendarDays}
-            title="Noch keine Termine"
-            description="Termine werden über das CMS gepflegt und erscheinen hier automatisch."
+            title={page.emptyState.title}
+            description={page.emptyState.description}
           />
         )}
       </ContentSection>

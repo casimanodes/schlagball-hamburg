@@ -1,0 +1,54 @@
+{
+  "kind": "singleType",
+  "collectionName": "page_about",
+  "info": {
+    "singularName": "page-about",
+    "pluralName": "page-abouts",
+    "displayName": "Über-Uns Seite",
+    "description": "Inhalte der Seite /ueber-uns – Geschichte, Mission, Team, CTA"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "hero": {
+      "type": "component",
+      "repeatable": false,
+      "component": "shared.hero"
+    },
+    "storyHeader": {
+      "type": "component",
+      "repeatable": false,
+      "component": "shared.section-header"
+    },
+    "storyContent": {
+      "type": "richtext"
+    },
+    "missionHeader": {
+      "type": "component",
+      "repeatable": false,
+      "component": "shared.section-header"
+    },
+    "missionItems": {
+      "type": "component",
+      "repeatable": true,
+      "component": "page.mission-item"
+    },
+    "teamHeader": {
+      "type": "component",
+      "repeatable": false,
+      "component": "shared.section-header"
+    },
+    "teamMembers": {
+      "type": "component",
+      "repeatable": true,
+      "component": "page.team-member"
+    },
+    "cta": {
+      "type": "component",
+      "repeatable": false,
+      "component": "shared.cta"
+    }
+  }
+}

@@ -18,6 +18,7 @@ export default {
     const existingActions = new Set(permissions.map((p: any) => p.action));
 
     const requiredPermissions = [
+      // Collection types
       'api::player-profile.player-profile.find',
       'api::player-profile.player-profile.findOne',
       'api::training-post.training-post.find',
@@ -25,6 +26,19 @@ export default {
       'api::training-event.training-event.find',
       'api::gallery-item.gallery-item.find',
       'api::gallery-item.gallery-item.findOne',
+      // Single types (page contents)
+      'api::page-home.page-home.find',
+      'api::page-about.page-about.find',
+      'api::page-sport.page-sport.find',
+      'api::page-training.page-training.find',
+      'api::page-membership.page-membership.find',
+      'api::page-gallery.page-gallery.find',
+      'api::page-players.page-players.find',
+      'api::page-blog.page-blog.find',
+      'api::page-calendar.page-calendar.find',
+      'api::page-imprint.page-imprint.find',
+      'api::page-privacy.page-privacy.find',
+      'api::global-content.global-content.find',
     ];
 
     for (const action of requiredPermissions) {
