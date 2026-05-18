@@ -227,22 +227,132 @@ export async function getGalleryItems(): Promise<GalleryItem[]> {
 /* ------------------------------------------------------------------ */
 
 /**
- * Tiefe Populate-Strategie für Single Types: lädt alle Components mit
- * ihren Sub-Components, damit Hero, CTA, etc. komplett befüllt sind.
+ * Strapi 5 braucht explizite Populate-Konfigurationen pro Content-Type,
+ * weil `populate=*` nur die erste Ebene befüllt und Media-Felder in
+ * Komponenten (z.B. teamMembers.image) auslässt.
  */
-const PAGE_POPULATE_DEEP = {
-  populate: "*" as const,
-};
+const POPULATE = {
+  home: {
+    hero: true,
+    stats: true,
+    featuresHeader: true,
+    features: true,
+    eventsHeader: true,
+    postsHeader: true,
+    cta: true,
+  },
+  about: {
+    hero: true,
+    storyHeader: true,
+    missionHeader: true,
+    missionItems: true,
+    teamHeader: true,
+    teamMembers: { populate: { image: true } },
+    cta: true,
+  },
+  sport: {
+    hero: true,
+    overviewHeader: true,
+    pointsHeader: true,
+    points: true,
+    equipmentHeader: true,
+    equipmentCards: true,
+    fieldHeader: true,
+    tournamentsHeader: true,
+    tournaments: true,
+    faqHeader: true,
+    faqs: true,
+    cta: true,
+  },
+  training: {
+    hero: true,
+    sessionsHeader: true,
+    sessions: true,
+    trialHeader: true,
+    eventsHeader: true,
+    cta: true,
+  },
+  membership: {
+    hero: true,
+    plansHeader: true,
+    plans: true,
+    stepsHeader: true,
+    steps: true,
+    benefitsHeader: true,
+    benefits: true,
+  },
+  gallery: {
+    hero: true,
+    sectionHeader: true,
+    cta: true,
+  },
+  players: {
+    hero: true,
+    sectionHeader: true,
+    emptyState: true,
+  },
+  blog: {
+    hero: true,
+    sectionHeader: true,
+    emptyState: true,
+  },
+  calendar: {
+    hero: true,
+    emptyState: true,
+  },
+  imprint: {
+    hero: true,
+    vereinsangabenHeader: true,
+    kontaktHeader: true,
+    kontakte: true,
+    haftungSections: true,
+  },
+  privacy: {
+    hero: true,
+    sections: true,
+  },
+  global: {
+    navItems: true,
+  },
+} as const;
+
+const STRAPI_META_KEYS = new Set([
+  "id", "documentId", "createdAt", "updatedAt", "publishedAt", "locale",
+]);
 
 /**
- * Strapi liefert Single-Type-Inhalte mit vielen verschachtelten Components.
- * `mergePageContent` verschmilzt Strapi-Daten mit Mock-Defaults, sodass
- * leere Felder den Default zeigen statt zu crashen.
+ * Entfernt Strapi-Metadaten (id, documentId, etc.) aus einem Objekt,
+ * damit nur die redaktionellen Felder übrig bleiben.
+ */
+function stripStrapiMeta(obj: Record<string, unknown>): Record<string, unknown> {
+  const cleaned: Record<string, unknown> = {};
+  for (const [key, value] of Object.entries(obj)) {
+    if (STRAPI_META_KEYS.has(key)) continue;
+    if (Array.isArray(value)) {
+      cleaned[key] = value.map((item) =>
+        item && typeof item === "object" && !Array.isArray(item)
+          ? stripStrapiMeta(item as Record<string, unknown>)
+          : item,
+      );
+    } else if (value && typeof value === "object") {
+      cleaned[key] = stripStrapiMeta(value as Record<string, unknown>);
+    } else {
+      cleaned[key] = value;
+    }
+  }
+  return cleaned;
+}
+
+/**
+ * Verschmilzt Strapi-Daten mit Mock-Defaults: null-Felder und leere
+ * Arrays behalten den Default, damit die Seite nie leer rendert.
  */
 function mergePageContent<T>(remote: Partial<T> | null | undefined, fallback: T): T {
   if (!remote) return fallback;
+
+  const cleaned = stripStrapiMeta(remote as Record<string, unknown>);
   const result = { ...fallback } as Record<string, unknown>;
-  for (const [key, value] of Object.entries(remote)) {
+  for (const [key, value] of Object.entries(cleaned)) {
     if (value === null || value === undefined) continue;
     if (Array.isArray(value) && value.length === 0) continue;
     if (typeof value === "object" && !Array.isArray(value)) {
@@ -260,64 +370,74 @@ function mergePageContent<T>(remote: Partial<T> | null | undefined, fallback: T)
   return result as T;
 }
 
-async function fetchSingleType<T>(path: string, fallback: T): Promise<T> {
-  // Während des Vercel-Builds Strapi für Page-Inhalte überspringen,
-  // damit fehlende Single Types oder ungewohnte Strapi-Antworten den
-  // Build niemals stoppen können. Live-Updates kommen via ISR (revalidate).
+async function fetchSingleType<T>(
+  path: string,
+  fallback: T,
+  populate: Record<string, unknown>,
+): Promise<T> {
   if (IS_BUILD) return fallback;
   return tryStrapi(async () => {
     const res = await fetchStrapi<StrapiSingleResponse<Partial<T>>>(
       path,
-      { query: PAGE_POPULATE_DEEP },
+      { query: { populate } },
     );
+    if (!res.data) {
+      console.warn(
+        `[api] Strapi returned null for ${path} – content may not be published. Using fallback.`,
+      );
+      return fallback;
+    }
+    if (process.env.NODE_ENV === "development") {
+      console.log(`[api] Strapi data loaded for ${path}`);
+    }
     return mergePageContent(res.data, fallback);
   }, fallback);
 }
 
 export function getHomePage(): Promise<HomePageContent> {
-  return fetchSingleType("/page-home", mockHomePage);
+  return fetchSingleType("/page-home", mockHomePage, POPULATE.home);
 }
 
 export function getAboutPage(): Promise<AboutPageContent> {
-  return fetchSingleType("/page-about", mockAboutPage);
+  return fetchSingleType("/page-about", mockAboutPage, POPULATE.about);
 }
 
 export function getSportPage(): Promise<SportPageContent> {
-  return fetchSingleType("/page-sport", mockSportPage);
+  return fetchSingleType("/page-sport", mockSportPage, POPULATE.sport);
 }
 
 export function getTrainingPage(): Promise<TrainingPageContent> {
-  return fetchSingleType("/page-training", mockTrainingPage);
+  return fetchSingleType("/page-training", mockTrainingPage, POPULATE.training);
 }
 
 export function getMembershipPage(): Promise<MembershipPageContent> {
-  return fetchSingleType("/page-membership", mockMembershipPage);
+  return fetchSingleType("/page-membership", mockMembershipPage, POPULATE.membership);
 }
 
 export function getGalleryPage(): Promise<GalleryPageContent> {
-  return fetchSingleType("/page-gallery", mockGalleryPage);
+  return fetchSingleType("/page-gallery", mockGalleryPage, POPULATE.gallery);
 }
 
 export function getPlayersPage(): Promise<PlayersPageContent> {
-  return fetchSingleType("/page-players", mockPlayersPage);
+  return fetchSingleType("/page-players", mockPlayersPage, POPULATE.players);
 }
 
 export function getBlogPage(): Promise<BlogPageContent> {
-  return fetchSingleType("/page-blog", mockBlogPage);
+  return fetchSingleType("/page-blog", mockBlogPage, POPULATE.blog);
 }
 
 export function getCalendarPage(): Promise<CalendarPageContent> {
-  return fetchSingleType("/page-calendar", mockCalendarPage);
+  return fetchSingleType("/page-calendar", mockCalendarPage, POPULATE.calendar);
 }
 
 export function getImprintPage(): Promise<ImprintPageContent> {
-  return fetchSingleType("/page-imprint", mockImprintPage);
+  return fetchSingleType("/page-imprint", mockImprintPage, POPULATE.imprint);
 }
 
 export function getPrivacyPage(): Promise<PrivacyPageContent> {
-  return fetchSingleType("/page-privacy", mockPrivacyPage);
+  return fetchSingleType("/page-privacy", mockPrivacyPage, POPULATE.privacy);
 }
 
 export function getGlobalContent(): Promise<GlobalContent> {
-  return fetchSingleType("/global-content", mockGlobalContent);
+  return fetchSingleType("/global-content", mockGlobalContent, POPULATE.global);
 }
