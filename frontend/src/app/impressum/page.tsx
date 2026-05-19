@@ -7,6 +7,9 @@ import RichText from "@/components/sections/RichText";
 import { getImprintPage } from "@/lib/api";
 import { heroProps, sectionHeaderProps } from "@/lib/block-helpers";
 
+// ISR: Strapi-Daten werden alle 60 Sekunden im Hintergrund frisch geladen.
+export const revalidate = 60;
+
 export const metadata: Metadata = {
   title: "Impressum",
   description: "Impressum und rechtliche Angaben von Schlagball Hamburg e.V.",

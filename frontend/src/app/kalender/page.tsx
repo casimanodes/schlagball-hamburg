@@ -7,6 +7,9 @@ import { getEvents, getCalendarPage } from "@/lib/api";
 import { heroProps } from "@/lib/block-helpers";
 import CalendarFilter from "./CalendarFilter";
 
+// ISR: Strapi-Daten werden alle 60 Sekunden im Hintergrund frisch geladen.
+export const revalidate = 60;
+
 export const metadata: Metadata = {
   title: "Kalender & Termine",
   description:

@@ -8,6 +8,9 @@ import BlogCard from "@/components/cards/BlogCard";
 import { getPosts, getBlogPage } from "@/lib/api";
 import { heroProps, sectionHeaderProps } from "@/lib/block-helpers";
 
+// ISR: Strapi-Daten werden alle 60 Sekunden im Hintergrund frisch geladen.
+export const revalidate = 60;
+
 export const metadata: Metadata = {
   title: "Blog & Neuigkeiten",
   description:
