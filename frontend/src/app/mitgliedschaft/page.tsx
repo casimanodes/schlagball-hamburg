@@ -11,6 +11,7 @@ import { CONTACT_EMAIL } from "@/lib/constants";
 import { getMembershipPage } from "@/lib/api";
 import { resolveIcon } from "@/lib/icons";
 import { heroProps, sectionHeaderProps } from "@/lib/block-helpers";
+import { strapiImageUrl } from "@/lib/strapi";
 import type { MembershipPlan } from "@/types";
 
 export const metadata: Metadata = {
@@ -33,6 +34,17 @@ export default async function MembershipPage() {
     features: plan.features,
     highlighted: !!plan.highlighted,
   }));
+
+  // Priorität für den Download-Button:
+  // 1. Wenn eine PDF in Strapi hochgeladen ist → diese als Download
+  // 2. Sonst Fallback auf downloadCardButtonHref (manuelle URL)
+  // 3. Wenn beides leer/"#" → Button wird ohne Link gerendert
+  const downloadUrl = page.downloadFile?.url
+    ? strapiImageUrl(page.downloadFile.url)
+    : page.downloadCardButtonHref && page.downloadCardButtonHref !== "#"
+      ? page.downloadCardButtonHref
+      : null;
+  const downloadFilename = page.downloadFile?.name;
 
   return (
     <>
@@ -91,10 +103,18 @@ export default async function MembershipPage() {
                 </a>
                 .
               </p>
-              {page.downloadCardButtonHref && page.downloadCardButtonHref !== "#" ? (
+              {downloadUrl ? (
                 <Link
-                  href={page.downloadCardButtonHref}
+                  href={downloadUrl}
                   className="inline-block"
+                  // download lädt die Datei runter statt sie zu öffnen.
+                  // Funktioniert nur bei same-origin oder bei Servern, die
+                  // Content-Disposition setzen (Strapi Cloud tut das).
+                  download={downloadFilename ?? true}
+                  // _blank als Fallback: falls der Browser nicht
+                  // herunterlädt, öffnet sich die PDF in einem neuen Tab
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
                   <Button
                     size="lg"
@@ -108,6 +128,7 @@ export default async function MembershipPage() {
                 <Button
                   size="lg"
                   className="bg-accent text-accent-foreground hover:bg-accent/90"
+                  disabled
                 >
                   <Download className="h-4 w-4 mr-2" />
                   {page.downloadCardButtonLabel}

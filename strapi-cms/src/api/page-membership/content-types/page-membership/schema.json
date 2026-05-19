@@ -49,6 +49,11 @@
     "downloadCardButtonHref": {
       "type": "string"
     },
+    "downloadFile": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": ["files"]
+    },
     "benefitsHeader": {
       "type": "component",
       "repeatable": false,

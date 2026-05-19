@@ -203,6 +203,19 @@ export interface TrainingPageContent {
   cta: CtaBlock;
 }
 
+/**
+ * Hochgeladene Datei aus Strapi (z.B. PDF-Mitgliedsantrag).
+ * Strapi 5 liefert `url`, `name`, `mime` direkt auf dem Datei-Objekt.
+ */
+export interface StrapiFile {
+  id: number;
+  url: string;
+  name: string;
+  mime: string;
+  size?: number;
+  ext?: string;
+}
+
 export interface MembershipPageContent {
   hero: HeroBlock;
   plansHeader: SectionHeaderBlock;
@@ -212,7 +225,10 @@ export interface MembershipPageContent {
   downloadCardTitle: string;
   downloadCardDescription: string;
   downloadCardButtonLabel: string;
+  /** Fallback-URL falls kein PDF hochgeladen wurde */
   downloadCardButtonHref: string;
+  /** PDF-Datei (z.B. Mitgliedsantrag) – aus Strapi-Media */
+  downloadFile?: StrapiFile | null;
   benefitsHeader: SectionHeaderBlock;
   benefits: BenefitItemBlock[];
 }
