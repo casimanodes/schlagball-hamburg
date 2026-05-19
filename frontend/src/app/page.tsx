@@ -11,6 +11,9 @@ import { resolveIcon } from "@/lib/icons";
 import { ctaProps, heroProps, sectionHeaderProps } from "@/lib/block-helpers";
 import type { FeatureItem } from "@/components/sections/FeatureGrid";
 
+// ISR: Strapi-Daten werden alle 60 Sekunden im Hintergrund frisch geladen.
+export const revalidate = 60;
+
 export default async function HomePage() {
   const [page, posts, events] = await Promise.all([
     getHomePage(),

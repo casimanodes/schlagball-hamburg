@@ -16,6 +16,9 @@ import { getSportPage } from "@/lib/api";
 import { resolveIcon } from "@/lib/icons";
 import { ctaProps, heroProps, sectionHeaderProps } from "@/lib/block-helpers";
 
+// ISR: Strapi-Daten werden alle 60 Sekunden im Hintergrund frisch geladen.
+export const revalidate = 60;
+
 export const metadata: Metadata = {
   title: "Der Sport: Schlagball",
   description:

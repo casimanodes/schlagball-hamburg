@@ -10,6 +10,9 @@ import { strapiImageUrl } from "@/lib/strapi";
 import { getAboutPage } from "@/lib/api";
 import { ctaProps, heroProps, sectionHeaderProps } from "@/lib/block-helpers";
 
+// ISR: Strapi-Daten werden alle 60 Sekunden im Hintergrund frisch geladen.
+export const revalidate = 60;
+
 export const metadata: Metadata = {
   title: "Über uns",
   description:

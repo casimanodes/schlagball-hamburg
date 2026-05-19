@@ -14,6 +14,10 @@ import { heroProps, sectionHeaderProps } from "@/lib/block-helpers";
 import { strapiImageUrl } from "@/lib/strapi";
 import type { MembershipPlan } from "@/types";
 
+// ISR: Page wird beim Build statisch generiert (mit Mock, da SKIP_STRAPI_AT_BUILD=1),
+// danach alle 60 Sekunden im Hintergrund mit den aktuellen Strapi-Daten neu gerendert.
+export const revalidate = 60;
+
 export const metadata: Metadata = {
   title: "Mitgliedschaft & Beiträge",
   description:
