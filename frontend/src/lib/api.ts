@@ -31,7 +31,7 @@ import type {
   PrivacyPageContent,
   GlobalContent,
 } from "@/types/pages";
-import { fetchStrapi } from "./strapi";
+import { fetchStrapi, StrapiFetchError } from "./strapi";
 import {
   mockPlayers,
   mockPosts,
@@ -65,17 +65,33 @@ const IS_BUILD =
 /**
  * Try Strapi, handle failures depending on context:
  * - No token / build phase / development → fall back to mock data
- * - Production runtime → re-throw so ISR keeps the last good cached page
+ * - 404 (record never created in Strapi) → always fall back to mocks,
+ *   that's just "Single Type not saved yet" and shouldn't crash anything
+ * - Production runtime + real error → re-throw so ISR keeps the last good page
  */
 async function tryStrapi<T>(
   fn: () => Promise<T>,
   fallback: T,
+  context?: string,
 ): Promise<T> {
   if (!HAS_STRAPI) return fallback;
   try {
     return await fn();
   } catch (err) {
-    console.error("[api] Strapi fetch failed:", (err as Error).message);
+    // 404 = Datensatz noch nie in Strapi gespeichert. Bei Single Types
+    // muss man jeden Type einmal im Admin speichern+publishen, sonst
+    // antwortet Strapi mit NotFoundError. Das ist kein Bug.
+    if (err instanceof StrapiFetchError && err.status === 404) {
+      console.warn(
+        `[api] Strapi 404 for ${context ?? "endpoint"} – ` +
+          `bitte einmal im Strapi-Admin speichern und publizieren. Nutze solange Mock-Daten.`,
+      );
+      return fallback;
+    }
+    console.error(
+      `[api] Strapi fetch failed${context ? ` (${context})` : ""}:`,
+      (err as Error).message,
+    );
     if (IS_BUILD || process.env.NODE_ENV === "development") {
       console.warn("[api] Using mock data as fallback");
       return fallback;
@@ -376,22 +392,26 @@ async function fetchSingleType<T>(
   populate: Record<string, unknown>,
 ): Promise<T> {
   if (IS_BUILD) return fallback;
-  return tryStrapi(async () => {
-    const res = await fetchStrapi<StrapiSingleResponse<Partial<T>>>(
-      path,
-      { query: { populate } },
-    );
-    if (!res.data) {
-      console.warn(
-        `[api] Strapi returned null for ${path} – content may not be published. Using fallback.`,
+  return tryStrapi(
+    async () => {
+      const res = await fetchStrapi<StrapiSingleResponse<Partial<T>>>(
+        path,
+        { query: { populate } },
       );
-      return fallback;
-    }
-    if (process.env.NODE_ENV === "development") {
-      console.log(`[api] Strapi data loaded for ${path}`);
-    }
-    return mergePageContent(res.data, fallback);
-  }, fallback);
+      if (!res.data) {
+        console.warn(
+          `[api] Strapi gab null zurück für ${path} – Inhalt evtl. nicht publiziert. Nutze Mock-Daten.`,
+        );
+        return fallback;
+      }
+      if (process.env.NODE_ENV === "development") {
+        console.log(`[api] Strapi-Daten geladen für ${path}`);
+      }
+      return mergePageContent(res.data, fallback);
+    },
+    fallback,
+    path,
+  );
 }
 
 export function getHomePage(): Promise<HomePageContent> {
