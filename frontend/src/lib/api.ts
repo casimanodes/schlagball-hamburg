@@ -294,6 +294,7 @@ const POPULATE = {
     plans: true,
     stepsHeader: true,
     steps: true,
+    downloadFile: true,
     benefitsHeader: true,
     benefits: true,
   },

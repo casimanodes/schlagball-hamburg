@@ -77,6 +77,20 @@ Erst nach dem ersten Publish existiert der Datensatz und die API liefert HTTP 20
 - **title** – Haupttitel des Abschnitts
 - **description** – Optionaler Beschreibungstext
 
+## Mitgliedsantrag-PDF hochladen
+
+Auf der Mitgliedschafts-Seite gibt es einen "Antrag herunterladen"-Button. So lädst du die PDF hoch:
+
+1. **Strapi-Admin** → **Content Manager** → **Single Types** → **Mitgliedschaft Seite**
+2. Scrolle zum Feld **downloadFile**
+3. Klick auf **+ Click to add an asset** → PDF auswählen oder hochladen
+4. Den Button-Text kannst du im Feld **downloadCardButtonLabel** anpassen (z.B. "Mitgliedsantrag herunterladen (PDF)")
+5. **Save** + **Publish**
+
+Sobald die PDF hochgeladen ist, lädt der Button die Datei direkt herunter. Wenn keine PDF hochgeladen ist, wird der Button **ausgegraut** (disabled) angezeigt.
+
+**Fallback:** Falls du statt einer PDF einen externen Link nutzen willst (z.B. zu einem Cloud-Speicher), kannst du im Feld **downloadCardButtonHref** eine URL eintragen. Wird ignoriert, sobald eine PDF in `downloadFile` hochgeladen ist.
+
 ## Wie funktioniert das Merge mit Default-Inhalten?
 
 Wenn du z.B. nur `hero.title` befüllst und `hero.description` leer lässt:
