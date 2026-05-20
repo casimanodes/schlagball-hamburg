@@ -414,16 +414,20 @@ Wir trainieren jeden Freitag von 14 bis 16 Uhr auf dem Platz an der Meerweinstra
 /*  Mitgliedschaft                                                     */
 /* ------------------------------------------------------------------ */
 
+// Diese Mock-Daten entsprechen dem aktuellen Strapi-Stand (Single Type
+// "page-membership", Stand 2026-05-19). Sie dienen als Fallback, falls
+// Strapi nicht erreichbar ist – so zeigt die Seite trotzdem die echten
+// Vereinsinhalte statt generischer Platzhalter.
 export const mockMembershipPage: MembershipPageContent = {
   hero: {
     subtitle: "Mitgliedschaft",
-    title: "Werde Teil von Schlagball Hamburg",
+    title: "Werde Teil von Schlagball Hamburg!",
     description:
-      "Einfache und faire Mitgliedsbeiträge – für regelmäßiges Training, Turniere und eine starke Gemeinschaft.",
+      "Günstige und faire Mitgliedsbeiträge – für regelmäßiges Training, Turniere und eine starke Gemeinschaft.",
   },
   plansHeader: {
     overline: "Beiträge",
-    title: "Unsere Mitgliedschaftspläne",
+    title: "Mitgliedschaften",
     description: "Wähle den Plan, der zu dir passt.",
   },
   plans: [
@@ -431,29 +435,23 @@ export const mockMembershipPage: MembershipPageContent = {
       name: "Regulär",
       price: 9,
       interval: "Monat",
-      description: "Perfekt für den Einstieg – 1× Training pro Woche.",
+      description: "Schlagballtraining von Lizensierten Trainern",
       features: [
         "1× Training pro Woche",
         "Zugang zu Vereinsturnieren",
         "Gemeinschaft & Teamgeist",
         "Leihausrüstung inklusive",
       ],
-      highlighted: false,
+      highlighted: true,
     },
     {
-      name: "Pro",
-      price: 14,
+      name: "Fördermitglied",
+      price: 5,
       interval: "Monat",
-      description: "Für ambitionierte Spieler – 2× Training pro Woche.",
-      features: [
-        "2× Training pro Woche",
-        "Freitags- und Hallentraining",
-        "Zugang zu Vereinsturnieren",
-        "Gemeinschaft & Teamgeist",
-        "Leihausrüstung inklusive",
-        "Bevorzugte Turnierplätze",
-      ],
-      highlighted: true,
+      description:
+        "Du bist Fördermitglied des Schlagball Hamburg e.V.. Die Teilnahme am Training ist nicht eingeschlossen",
+      features: ["Förderung des Schlagball Hamburg e.V."],
+      highlighted: false,
     },
   ],
   stepsHeader: {
@@ -485,16 +483,24 @@ export const mockMembershipPage: MembershipPageContent = {
   ],
   downloadCardTitle: "Mitgliedsantrag herunterladen",
   downloadCardDescription:
-    "Lade das Formular herunter, fülle es aus und sende es an uns.",
+    "Lade das Formular herunter, fülle es aus und sende es an uns. info@schlagball-hamburg.de.",
   downloadCardButtonLabel: "Antrag herunterladen (PDF)",
-  downloadCardButtonHref: "#",
+  downloadCardButtonHref: "/antragherunterladen",
+  downloadFile: {
+    id: 7,
+    url: "https://motivated-life-96fc7c8d59.media.strapiapp.com/Aufnahmeantrag_S_H_e_V_3fa8965337.pdf",
+    name: "Aufnahmeantrag_S.H.e.V..pdf",
+    mime: "application/pdf",
+    size: 93.9,
+    ext: ".pdf",
+  },
   benefitsHeader: {
     overline: "Vorteile",
     title: "Warum Mitglied werden?",
   },
   benefits: [
     {
-      title: "Regelmäßiges Training",
+      title: "Wöchentliches Training - Freitags 13:15-15:15 Uhr",
       text: "Bis zu 2× pro Woche professionell geleitetes Training.",
     },
     {
@@ -503,19 +509,19 @@ export const mockMembershipPage: MembershipPageContent = {
     },
     {
       title: "Gemeinschaft",
-      text: "Ein starkes Team und neue Freundschaften.",
+      text: 'Eine starke Gemeinschaft als Schlagballteam "Hamburg"',
     },
     {
       title: "Erfahrene Trainer",
-      text: "Qualifizierte Trainer mit jahrelanger Erfahrung.",
+      text: "Qualifizierte Trainer mit jahrelanger Erfahrung",
     },
     {
-      title: "Leihausrüstung",
-      text: "Du brauchst nichts mitbringen – wir stellen alles bereit.",
+      title: "Fester Trainingsplatz",
+      text: "Training auf dem Sportplatz der Winterhuder Reformschule",
     },
     {
-      title: "Faire Beiträge",
-      text: "Transparente und günstige Mitgliedsbeiträge ab 9 € im Monat.",
+      title: "Fairer Beitrag",
+      text: "Günstiger Mitgliedsbeitrag",
     },
   ],
 };
